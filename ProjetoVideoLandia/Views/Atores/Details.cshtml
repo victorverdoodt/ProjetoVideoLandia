@@ -40,6 +40,14 @@
 </div>
 <br />
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
-    <a asp-action="Index">Voltar para a Lista</a>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+    {
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> | <a asp-action="Delete" asp-route-id="@Model?.Id">Deletar</a>
+        </div>
+    }
+
+    <div>
+        <a asp-action="Index">Voltar para a Lista</a>
+    </div>
 </div>
