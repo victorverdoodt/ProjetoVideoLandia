@@ -89,13 +89,13 @@ namespace ProjetoVideoLandia.Controllers
             return View(model);
         }
 
-        [HttpPost("Logout")]
+        [HttpGet("Logout")]
         public IActionResult Logout()
         {
             // Remova o token de autenticação do cookie ou do armazenamento local
             // Aqui, estamos removendo o token do cookie:
             Response.Cookies.Delete("Authorization");
-
+            Response.Cookies.Delete("jwt");
             // Redirecione o usuário para a página de login
             return RedirectToAction("Index", "Filmes");
         }
