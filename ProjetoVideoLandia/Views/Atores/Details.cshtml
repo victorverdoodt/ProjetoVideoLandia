@@ -1,0 +1,45 @@
+﻿@model ProjetoVideoLandia.Models.Ator
+
+@{
+    ViewData["Title"] = "Detalhes";
+}
+
+<h1>Detalhes do Ator</h1>
+
+<div class="row">
+    <div class="col-sm-4">
+        <img src="@Url.Content($"~/images/{Model.Foto}")" alt="@Model.Nome" class="img-fluid">
+    </div>
+    <div class="col-sm-8">
+        <h2>@Model.Nome</h2>
+        <p><strong>Data de Nascimento:</strong> @Model.DataDeNascimento</p>
+        <p><strong>País de Nascimento:</strong> @Model.PaisDeNascimento</p>
+        <p>
+        <div class="form-group">
+            <h5>Filmes em que participou</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Personagem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var filme in Model.FilmesParticipados)
+                    {
+                        <tr>
+                            <td>@filme.Filme.Titulo</td>
+                            <td>@filme.Personagem</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        </p>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
+    <a asp-action="Index">Voltar para a Lista</a>
+</div>

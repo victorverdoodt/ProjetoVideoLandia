@@ -1,0 +1,28 @@
+﻿@model IEnumerable<MensagemContato>
+
+<div class="container">
+    <h2>Visualizar Mensagens de Contato</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Assunto</th>
+                <th>Mensagem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var mensagem in Model)
+            {
+                <tr>
+                    <td>@mensagem.Nome</td>
+                    <td>@mensagem.Email</td>
+                    <td>@mensagem.Assunto</td>
+                    <td>@mensagem.Mensagem</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

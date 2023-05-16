@@ -1,0 +1,118 @@
+﻿@model ProjetoVideoLandia.ViewModels.FilmeViewModel
+
+@{
+    ViewData["Title"] = "Filmes";
+}
+
+<style>
+    .card {
+        width: 18%;
+        margin: 10px;
+        background-color: #F1F1F1;
+        border: 1px solid #CCC;
+        border-radius: 5px;
+        box-shadow: 2px 2px 2px #999;
+        text-align: center;
+    }
+
+        .card img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .card h4 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination .page-item {
+        margin: 0 5px;
+    }
+</style>
+
+<h1>Filmes</h1>
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+{
+    <p>
+        <a asp-action="Create">Novo</a>
+    </p>
+}
+
+<form class="d-flex" method="get" asp-controller="Filmes">
+    <input class="form-control me-2" type="search" name="busca" placeholder="Pesquisar" aria-label="Pesquisar">
+    <button class="btn btn-outline-success" type="submit">Buscar</button>
+</form>
+
+<div class="row">
+    @foreach (var item in Model.Filmes)
+    {
+        <a href="@Url.Action("Details", "Filmes", new { id = item.Id })" class="card">
+            @if (!string.IsNullOrEmpty(item.FotoDaCapa))
+            {
+                <img src="@Url.Content($"~/images/{item.FotoDaCapa}")" />
+            }
+            else
+            {
+                <img src="@Url.Content("~/images/no-image.png")" />
+            }
+            <div style="background-color: #F1F1F1;">
+                <h4>@item.Titulo - @item.Ano</h4>
+            </div>
+        </a>
+    }
+</div>
+
+<nav>
+    <ul class="pagination">
+        @if (Model.Pagination != null)
+        {
+            if (Model.Pagination.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.Pagination.PageIndex - 1 })"> &lt;&lt; </a>
+                </li>
+            }
+
+            for (int i = 1; i <= Model.Pagination.TotalPages; i++)
+            {
+                if (Model.Pagination.PageIndex == i)
+                {
+                    <li class="page-item active">
+                        <span class="page-link">@i <span class="sr-only"></span></span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                    </li>
+                }
+            }
+
+            if (Model.Pagination.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       href="@Url.Action("Index", new { page = Model.Pagination.PageIndex + 1 })"> &gt;&gt; </a>
+                </li>
+            }
+        }
+    </ul>
+</nav>

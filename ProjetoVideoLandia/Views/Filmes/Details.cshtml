@@ -1,0 +1,76 @@
+﻿@model ProjetoVideoLandia.Models.Filme
+
+@{
+    ViewData["Title"] = "Detalhes";
+}
+
+<h1>Detalhes do Filme</h1>
+<div class="row">
+    <div class="col-sm-4">
+        <img src="@Url.Content($"~/images/{Model.FotoDaCapa}")" alt="@Model.Titulo" class="img-fluid">
+    </div>
+    <div class="col-sm-8">
+        <h2>@Model.Titulo (@Model.Ano)</h2>
+        <p><strong>Sinopse:</strong> @Model.Sinopse</p>
+        <p><strong>Valor de Custo:</strong> R$ @Model.ValorDeCusto</p>
+        <p><strong>Diretor:</strong> @Model.Diretor</p>
+        <p>
+            <div class="form-group">
+                <h5>Atores Participantes</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Personagem</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ator in Model.AtoresParticipantes)
+                        {
+                            <tr>
+                                <td>@ator.Ator.Nome</td>
+                                <td>@ator.Ator.FilmesParticipados.FirstOrDefault(x=> x.FilmeId == Model.Id).Personagem</td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </p>
+        <p>
+            <div class="form-group">
+                <h5>Generos</h5>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ator in Model.Generos)
+                        {
+                            <tr>
+                                <td>@ator.Genero.Nome</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </p>
+    </div>
+</div>
+<br />
+<div>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+    {
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> | <a asp-action="Delete" asp-route-id="@Model?.Id">Deletar</a>
+        </div>
+    }
+
+    <div>
+        <a asp-action="Index">Voltar para a Lista</a>
+    </div>
+</div>

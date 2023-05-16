@@ -1,0 +1,196 @@
+﻿@model ProjetoVideoLandia.Models.Filme
+
+@{
+ViewData["Title"] = "Edit";
+}
+
+<h1>Editar</h1>
+<h4>Filme</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <img src="@Url.Content($"~/images/{Model.FotoDaCapa}")" class="img-fluid" alt="Capa do Filme" />
+    </div>
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />        
+<div class="form-group row">
+            <label asp-for="Titulo" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+        </div>
+            <div class="form-group row">
+                <label asp-for="Sinopse" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Sinopse" class="form-control" />
+                    <span asp-validation-for="Sinopse" class="text-danger"></span>
+                </div>
+            </div>
+        <div class="form-group row">
+            <label asp-for="Ano" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Ano" class="form-control" />
+                <span asp-validation-for="Ano" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="ValorDeCusto" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="ValorDeCusto" class="form-control" />
+                <span asp-validation-for="ValorDeCusto" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="Diretor" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Diretor" class="form-control" />
+                <span asp-validation-for="Diretor" class="text-danger"></span>
+            </div>
+        </div>
+  
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>   
+        <br>
+        <!-- Tabela de atores -->
+        <div class="form-group">
+            <h5>Atores Participantes</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Personagem</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ator in Model.AtoresParticipantes)
+                    {
+                        <tr>
+                            <td>@ator.Ator.Nome</td>
+                            <td>@ator.Ator.FilmesParticipados.FirstOrDefault(x=> x.FilmeId == Model.Id).Personagem</td>
+                            <td>
+                                <form method="post" asp-action="RemoveAtor">
+                                    <input type="hidden" name="filmeId" value="@Model.Id" />
+                                    <input type="hidden" name="atorId" value="@ator.AtorId" />
+                                    <button type="submit" class="btn btn-danger">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Formulário para adicionar um novo ator -->
+        <div class="modal fade" id="add-ator-modal" tabindex="-1" role="dialog" aria-labelledby="add-ator-modal-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form asp-action="AddAtor" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="add-ator-modal-label">Adicionar Ator</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="filmeId" value="@Model.Id" />
+                            <select id="selectAtor" class="form-control" onchange="document.getElementById('atorId').value = this.value;">
+                                <option value="">Selecione um ator</option>
+                                @foreach (var ator in (SelectList)ViewBag.AtorList)
+                                {
+                                    <option value="@ator.Value">@ator.Text</option>
+                                }
+                            </select>
+                            <input type="hidden" id="atorId" name="atorId" value="0" />
+                            <input type="text" name="personagem" class="form-control" placeholder="Nome do Personagem" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão para abrir o formulário de adicionar ator -->
+        <div class="form-group">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-ator-modal">Adicionar Ator</button>
+        </div>
+        <br>
+        <!-- Tabela de generos -->
+        <div class="form-group">
+            <h5>Generos</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ator in Model.Generos)
+                    {
+                        <tr>
+                            <td>@ator.Genero.Nome</td>
+                            <td>
+                                <form method="post" asp-action="RemoveGenero">
+                                    <input type="hidden" name="filmeId" value="@Model.Id" />
+                                    <input type="hidden" name="generoId" value="@ator.GeneroId" />
+                                    <button type="submit" class="btn btn-danger">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Formulário para adicionar um novo genero -->
+        <div class="modal fade" id="add-genero-modal" tabindex="-1" role="dialog" aria-labelledby="add-genero-modal-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form asp-action="AddGenero" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="add-genero-modal-label">Adicionar Genero</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="filmeId" value="@Model.Id" />
+                            <select id="selectGenero" class="form-control" onchange="document.getElementById('generoId').value = this.value;">
+                                <option value="">Selecione um genero</option>
+                                @foreach (var ator in (SelectList)ViewBag.GeneroList)
+                                {
+                                    <option value="@ator.Value">@ator.Text</option>
+                                }
+                            </select>
+                            <input type="hidden" id="generoId" name="generoId" value="0" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão para abrir o formulário de adicionar ator -->
+        <div class="form-group">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-genero-modal">Adicionar Genero</button>
+        </div>
+
+</div>
+
+        
+
