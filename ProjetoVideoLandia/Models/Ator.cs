@@ -10,7 +10,7 @@ namespace ProjetoVideoLandia.Models
         public DateTime? DataDeNascimento { get; set; }
         public string? PaisDeNascimento { get; set; }
         public string? Foto { get; set; }
-        public ICollection<FilmeAtor> FilmesParticipados { get; set; }
+        public ICollection<FilmeAtor>? FilmesParticipados { get; set; }
     }
 
 }

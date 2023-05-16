@@ -188,14 +188,14 @@ namespace ProjetoVideoLandia.Controllers
         [HttpPost]
         [Authorize(Roles = "2")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm][Bind("Id,Nome,DataDeNascimento,PaisDeNascimento,Foto")] Ator ator, [FromForm] IFormFile file)
+        public async Task<IActionResult> Create([FromForm][Bind("Id,Nome,DataDeNascimento,PaisDeNascimento,Foto")] Ator ator, [FromForm] IFormFile? file)
         {
             if (ModelState.IsValid)
             {
                 if (file != null && file.Length > 0)
                 {
                     // Defina o caminho para salvar o arquivo
-                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Imagem/Filmes");
+                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images/atores");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -206,7 +206,7 @@ namespace ProjetoVideoLandia.Controllers
                     }
 
                     // Atualize o campo "FotoDaCapa" com o caminho final
-                    ator.Foto = uniqueFileName;
+                    ator.Foto = $"atores\\{uniqueFileName}";
                 }
                 _context.Add(ator);
                 await _context.SaveChangesAsync();
@@ -238,7 +238,7 @@ namespace ProjetoVideoLandia.Controllers
         [HttpPost]
         [Authorize(Roles = "2")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [FromForm][Bind("Id,Nome,DataDeNascimento,PaisDeNascimento,Foto")] Ator ator, [FromForm] IFormFile file)
+        public async Task<IActionResult> Edit(int id, [FromForm][Bind("Id,Nome,DataDeNascimento,PaisDeNascimento")] Ator ator, [FromForm] IFormFile? file)
         {
             if (id != ator.Id)
             {
@@ -252,7 +252,7 @@ namespace ProjetoVideoLandia.Controllers
                     if (file != null && file.Length > 0)
                     {
                         // Defina o caminho para salvar o arquivo
-                        string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Imagem/Filmes");
+                        string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images\\atores");
                         string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                         string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -263,7 +263,7 @@ namespace ProjetoVideoLandia.Controllers
                         }
 
                         // Atualize o campo "FotoDaCapa" com o caminho final
-                        ator.Foto = uniqueFileName;
+                        ator.Foto = $"atores\\{uniqueFileName}";
                     }
                     _context.Update(ator);
                     await _context.SaveChangesAsync();
