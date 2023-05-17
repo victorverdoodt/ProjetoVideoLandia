@@ -32,8 +32,8 @@ namespace ProjetoVideoLandia.Controllers
             IQueryable<Ator> filmesPaginados;
             if (!busca.IsNullOrEmpty())
             {
-                totalFilmes = filmes.Where(x => x.Nome.ToLower().Contains(busca.ToLower())).Count();
-                filmesPaginados = filmes.Where(x => x.Nome.ToLower().Contains(busca.ToLower())).Skip((page - 1) * pageSize).Take(pageSize);
+                totalFilmes = filmes.Where(x => x.Nome.ToLower().Contains(busca.ToLower()) || x.PaisDeNascimento.ToLower().Contains(busca.ToLower())).Count();
+                filmesPaginados = filmes.Where(x => x.Nome.ToLower().Contains(busca.ToLower()) || x.PaisDeNascimento.ToLower().Contains(busca.ToLower())).Skip((page - 1) * pageSize).Take(pageSize);
             }
             else
             {
