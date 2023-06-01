@@ -10,7 +10,6 @@ using System.Data;
 
 namespace ProjetoVideoLandia.Controllers
 {
-
     public class FilmesController : Controller
     {
         private readonly VideoLandiaContext _context;
